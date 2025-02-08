@@ -109,7 +109,7 @@ app.get("/addCafe/:cafe", (req, res) => {
     db.query(query, cafe, (err, result) => {
         if (err) throw err;
         res.send("Cafe added successfully!");
-    })
+    })git
 });
 
 // Like a cafe for a user --> use the name of the user and the name of the cafe
