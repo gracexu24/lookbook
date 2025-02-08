@@ -3,11 +3,12 @@ const mysql = require("mysql2");
 
 
 const db = mysql.createConnection({
-    host: "autorack.proxy.rlwy.net",
+    host: "viaduct.proxy.rlwy.net",
     user: "root",
-    password: "aRCVkHaHyJGarKDRwACZkYrMYWEkeugQ",
+    password: "jDFjwbNHaacVMTHojYcizTWOERgoVdik",
     database: "railway",
-    port: "3306",
+    port: "22511"
+
 });
 
 
@@ -23,7 +24,7 @@ db.connect((err) => {
     const createUsersTable = `
         CREATE TABLE IF NOT EXISTS users (  
             id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            username VARCHAR(255) NOT NULL,
+            username VARCHAR(255) NOT NULL
         )`
 
     const createPostsTable = `
@@ -45,6 +46,11 @@ const app = express();
 const port = process.env.PORT || 5001;
 const cors = require("cors");
 app.use(cors());
+
+app.get("/", (req, res) => {
+    console.log("route hit")
+    res.send('hi')
+})
 
 app.get("/createdb", (req, res) => 
     {  let sql = "CREATE DATABASE lookbook";  
