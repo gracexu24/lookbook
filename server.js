@@ -1,17 +1,95 @@
 const express = require("express");
 const mysql = require("mysql2");
 
-/*
-const db = mysql.createConnection({
-    host: "viaduct.proxy.rlwy.net",
-    user: "root",
-    password: "jDFjwbNHaacVMTHojYcizTWOERgoVdik",
-    database: "railway",
-    port: "22511"
 
+const db = mysql.createConnection({
+    host: "autorack.proxy.rlwy.net",
+    user: "root",
+    password: "aRCVkHaHyJGarKDRwACZkYrMYWEkeugQ",
+    database: "railway",
+    port: "3306",
 });
 
 
+//MUST CREATE THE DATABASE FIRST
+db.connect((err) => {
+    if (err) {
+        console.log("ERROR!!!", err)
+        throw err
+    };
+
+    console.log("Database connected!!!");
+
+    const createUsersTable = `
+        CREATE TABLE IF NOT EXISTS users (  
+            id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            username VARCHAR(255) NOT NULL,
+        )`
+
+    const createPostsTable = `
+        CREATE TABLE IF NOT EXISTS posts (
+            id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            image VARCHAR(255),
+            details VARCHAR(500),
+            userid INT NOT NULL
+        )`;
+
+    db.query(createUsersTable);
+    db.query(createPostsTable);
+
+    console.log("Tables created (if not already).");
+
+})
+
+const app = express();
+const port = process.env.PORT || 5001;
+const cors = require("cors");
+app.use(cors());
+
+app.get("/createdb", (req, res) => 
+    {  let sql = "CREATE DATABASE lookbook";  
+        db.query(sql, (err) => 
+            {   if (err) {throw err;}    
+                res.send("Database created");  
+            }
+        );
+    }
+);
+
+app.listen(port, () => 
+    {  console.log(`Server started on port ${port}`);}
+);
+
+app.get("/showUsers", (req, res) => {
+    db.query("SELECT * FROM users", (err, result) => {
+        if (err) return err;
+        res.send(result);
+    })
+});
+
+app.get("/showPosts", (req, res) => {
+    db.query("SELECT * FROM posts", (err, result) => {
+        if (err) return err;
+        res.send(result);
+    })
+});
+
+app.get("/addUser/:name", (req, res) => {
+    const name = req.params.name;
+
+    const query = `INSERT INTO users (username) VALUES ${name}`;
+
+    db.query(query, (err) => {
+        if (err) return res.send(err);
+        res.send("User added successfully!");
+    });
+});
+
+
+
+
+
+/*
 db.connect((err) => {
     if (err) throw err;
     console.log("Database connected..railway?!");
