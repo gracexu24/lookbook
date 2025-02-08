@@ -3,17 +3,18 @@ const mysql = require("mysql2");
 
 
 const db = mysql.createConnection({
-    host: "localhost",
+    host: "autorack.proxy.rlwy.net",
     user: "root",
-    password: "jDFjwbNHaacVMTHojYcizTWOERgoVdik",
+    password: "aRCVkHaHyJGarKDRwACZkYrMYWEkeugQ",
     database: "railway",
-    port: 5001
+    port: "3306",
 });
+
 
 //MUST CREATE THE DATABASE FIRST
 db.connect((err) => {
     if (err) {
-        console.err("ERROR!!!", err)
+        console.log("ERROR!!!", err)
         throw err
     };
 
