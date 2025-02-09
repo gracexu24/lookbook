@@ -15,7 +15,7 @@ struct SignUpView: View {
                     VStack(spacing: 40) {
                         ZStack {
                             Text("Create \nAccount")
-                                .foregroundColor("black")
+                                .foregroundColor(.black)
                                 .font(.system(size: 35))
                                 .fontWeight(.bold)
                                 .multilineTextAlignment(.leading)
@@ -27,24 +27,20 @@ struct SignUpView: View {
                             VStack(spacing: 20) {
                                 CustomTextField(
                                     placeHolder: "Name", imageName: "envelope",
-                                    bColor: "textColor2",
                                     tOpacity:
-                                        1.0, value: $name)
+                                        1.0, bColor: "textColor2", value: $name)
                                 CustomTextField(
                                     placeHolder: "Email", imageName: "lock",
-                                    bColor: "textColor2",
                                     tOpacity:
-                                        1.0, value: $email)
+                                        1.0, bColor: "textColor2", value: $email)
                                 CustomTextField(
                                     placeHolder: "Password", imageName: "envelope",
-                                    bColor: "textColor2",
                                     tOpacity:
-                                        1.0, value: $password])
+                                        1.0, bColor: "textColor2", value: $password)
                                 CustomTextField(
                                     placeHolder: "Confirm Password", imageName: "lock",
-                                    bColor: "textColor2",
                                     tOpacity:
-                                        1.0, value: $cpassword)
+                                        1.0, bColor: "textColor2", value: $cpassword)
                             }
 
                             VStack(alignment: .trailing) {
@@ -52,7 +48,7 @@ struct SignUpView: View {
                                 Button(
                                     action: {},
                                     label: {
-                                        CustomButton(title: "SIGN UP", bgColor: "color2")
+                                        CustomButton(title: "SIGN UP", bColor: "color2")
                                     })
 
                             }.padding(.horizontal, 20)
@@ -63,27 +59,26 @@ struct SignUpView: View {
 
                     HStack {
                         Text("Already have an account?")
-                            .fontWEight(.bold)
+                            .fontWeight(.bold)
                             .foregroundColor(.white)
                             .font(.system(size: 18))
-                        NavigationLink(destination: LogInView(), isActive: $isLinkActive) {
-                            Button(
-                                action: {
+                        NavigationLink(value: true, label: {
+                            Button( action: {
                                     self.isLinkActive = true
                                 },
-                                lable: {
+                                    label: {
                                     Text("SIGN IN")
                                         .font(.system(size: 18))
                                         .foregroundColor(Color("color1"))
                                         .fontWeight(.bold)
                                 })
                         }
-                    }
+                    )}
 
                     .frame(height: 63)
                     .frame(minWidth: 0, maxWidth: .infinity)
                     .background(Color("color2"))
-                    .ignoreSafeArea()
+                    .ignoresSafeArea()
 
                 }
                 TopBarView()

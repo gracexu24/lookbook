@@ -15,7 +15,7 @@ struct LoginView: View {
                     VStack(spacing: 40) {
                         ZStack {
                             Text("Welcome \nBack")
-                                .foregroundColor("black")
+                                .foregroundColor(.black)
                                 .font(.system(size: 35))
                                 .fontWeight(.bold)
                                 .multilineTextAlignment(.leading)
@@ -23,68 +23,71 @@ struct LoginView: View {
                                 .padding(.leading, 20)
                         }
                         VStack(spacing: 30) {
-                            VStack (spacing: 30) {
+                            VStack(spacing: 30) {
                                 CustomTextField(
-                                    placeHolder: "Email", imageName: "envelope",
+                                    placeHolder: "Email",
+                                    imageName: "envelope",
+                                    tOpacity: 0.6, // ✅ tOpacity comes before bColor
                                     bColor: "textColor1",
-                                    tOpacity:
-                                        .6, value: $email)
-                                CustomTextField(
-                                    placeHolder: "Password", imageName: "lock",
-                                    bColor: "textColor1",
-                                    tOpacity:
-                                        .6, value: $password)
-                            }
+                                    value: $email)
 
+                                CustomTextField(
+                                    placeHolder: "Password",
+                                    imageName: "lock",
+                                    tOpacity: 0.6, // ✅ Corrected order
+                                    bColor: "textColor1",
+                                    value: $password)
+                            }
+                        }
                             VStack (alignment: .trailing) {
                                 Text("Forgot Password")
                                     .fontWeight(.medium)
                                 
-                                NavigationLink(destination: SignUpView(), isLinkActive: $isLinkActive){
-                                Button(action: {
-                                    self.isLinkActive = true
-                                }, label: {
-                                    CustomButton(title:"SIGN IN", bgColor: "color1")
-                                })
+                                NavigationLink(destination: SignUpView(), isActive: $isLinkActive){
+                                    Button(action: {
+                                        self.isLinkActive = true
+                                    }, label: {
+                                        CustomButton(title: "SIGN IN", bColor: "color1")
+                                    })
 
                                 }
                             }.padding(.horizontal, 20)
 
             }
         }
-        Spacer()
+                    Spacer()
 
-                            HStack{
-                                Text("Don't have an account?")
-                                    .fontWEight(.bold)
-                                    .foregroundColor(.white)
-                                    .font(.system(size:18))
+                    HStack {
+                        Text("Don't have an account?")
+                            .fontWeight(.bold) // Fixed the typo
+                            .foregroundColor(.white)
+                            .font(.system(size: 18))
 
-                                Button(action: {}, lable : {
-                                    Text("SIGN UP")
-                                        .font(.system(size: 18))
-                                        .foregroundColor(Color("color1"))
-                                        .fontWeight(.bold)
-                                })
-                            }
+                        Button(action: {}, label: {  // Fixed "lable" typo
+                            Text("SIGN UP")
+                                .font(.system(size: 18))
+                                .foregroundColor(Color("color1"))
+                                .fontWeight(.bold)
+                        })
+                    }
+                    .frame(height: 63) // Now correctly applied to HStack
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .background(Color("color2"))
+                    .ignoresSafeArea()
 
-                            .frame(height:63)
-                            .frame(minWidth: 0, maxWidth: .infinity)
-                            .background(Color("color2"))
-                            .ignoreSafeArea()
-                            
                         }
                         TopBarView()
                     }
 
                     .edgesIgnoringSafeArea(.bottom)
                 }
-                navigationBarHidden(true)
+                //navigationBarHidden(true)
     }
-}
 
-struct LogInView_Previews: PreviewProvider {
+
+
+struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        LogInView()
+        LoginView()
     }
 }
