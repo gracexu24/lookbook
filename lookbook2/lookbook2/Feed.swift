@@ -35,17 +35,33 @@ struct Feed: View {
                             .aspectRatio(contentMode: .fill)
                             .frame(width: 320, height: 340)
                             .cornerRadius(22)
-                            .padding(.vertical, 50)
+                            .padding(.top, 100)
+                            .padding(.bottom, 150)
                             
                             // Overlay for text and details
+                            VStack{
+                                
+                            }
+                            .padding(100)
+                            .frame(width:320, height: 150)
+                            .background(.ultraThinMaterial)
+                            .cornerRadius(22)
+                            .offset(x: 0, y: 180)
                             VStack(alignment: .leading) {
                                 Text("@user\(post.username)")
-                                    .font(.system(size: 20, weight: .bold))
-                                    .offset(x:-75, y:0)
+                                    .font(.system(size: 20))
+                                    .fontWeight(.bold)
+                                    .frame(width: 220, alignment: .leading)
+                                    .fixedSize(horizontal: true, vertical: true)
+                                    .padding(.leading, 85)
+                                    .offset(x: -75, y: 150)
                                 Text(post.caption)
-                                    .font(.system(size: 14))
-                                    .offset(x:-75, y:0)
-                                    .foregroundColor(.gray)
+                                    .font(.system(size: 10))
+                                    .frame(width: 220, alignment: .leading)
+                                    .lineLimit(nil)
+                                    .padding(.leading, 85)
+                                    .fontWeight(.bold)
+                                    .offset(x: -70, y: 155)
                                 Text(post.details)
                                     .font(.system(size: 14))
                                     .foregroundColor(.black)
@@ -78,9 +94,8 @@ struct Feed: View {
                              }
                              .frame(maxWidth: .infinity, alignment: .trailing)
                             .padding(.trailing, 60)
-                             .offset(x: 0, y: 250)
+                             .offset(x: 0, y: 220)
                             .padding()
-                            .background(.ultraThinMaterial)
                         }
                     }
                 }
