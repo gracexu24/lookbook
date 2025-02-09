@@ -133,7 +133,7 @@ app.post("/addPost", upload.single("image"), (req, res) => {
     }
 
     const { details, username, caption } = req.body;
-    const imageUrl = `http://localhost:5001/uploads/${req.file.filename}`;
+    const imageUrl = `https://lookbook-iuwk.onrender.com/uploads/${req.file.filename}`;
 
     const query = "INSERT INTO posts (image, details, caption, username) VALUES (?, ?, ?, ?)";
     db.query(query, [imageUrl, details, caption, username], (err, result) => {

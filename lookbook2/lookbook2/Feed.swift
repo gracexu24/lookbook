@@ -135,7 +135,7 @@ func ProfileView()->some View{
 
 
 func fetchPosts() {
-    guard let url = URL(string: "http://localhost:5001/showPosts") else {
+    guard let url = URL(string: "https://lookbook-iuwk.onrender.com/showPosts") else {
             errorMessage = "Invalid URL"
             return
         }

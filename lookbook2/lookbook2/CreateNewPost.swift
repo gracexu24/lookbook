@@ -12,7 +12,7 @@ struct CreateNewPost: View {
     @State private var tags: [String] = []
 
     func uploadPost(image: UIImage, details: String, caption: String, userId: String) {
-        guard let url = URL(string: "http://localhost:5001/addPost") else {
+        guard let url = URL(string: "https://lookbook-iuwk.onrender.com/addPost") else {
             print("Invalid URL")
             return
         }
