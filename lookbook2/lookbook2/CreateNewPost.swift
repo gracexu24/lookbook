@@ -22,7 +22,7 @@ struct CreateNewPost: View {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         // Convert UIImage to Base64 String
-        guard let imageData = image.jpegData(compressionQuality: 0.1) else {
+        guard let imageData = image.jpegData(compressionQuality: 0.5) else {
             print("Failed to convert image")
             return
         }

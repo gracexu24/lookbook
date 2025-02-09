@@ -89,7 +89,6 @@ struct Feed: View {
                 }
             }
             .onAppear(perform: fetchPosts)
-            .navigationTitle("Feed")
     }
 }
 
