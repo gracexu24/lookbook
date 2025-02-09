@@ -84,20 +84,30 @@ app.get("/showPosts", (req, res) => {
 app.get("/addUser/:name", (req, res) => {
     const name = req.params.name;
 
-    const query = `INSERT INTO users (username) VALUES ${name}`;
+    // Use parameterized query to prevent SQL Injection
+    const query = "INSERT INTO users (username) VALUES (?)";
 
-    db.query(query, (err) => {
-        if (err) return res.send(err);
+    db.query(query, [name], (err, result) => {
+        if (err) {
+            console.error("Error adding user:", err);
+            return res.status(500).send("Error adding user");
+        }
         res.send("User added successfully!");
     });
 });
 
+
 app.post("/addPost", (req, res) => {
-    const { image, details, userid } = req.body;
+
+    console.log(req.body);
 
     if (!image || !details || !userid) {
         return res.status(400).send("Missing required fields");
     }
+
+
+    const { image, details, userid } = req.body;
+
 
     const query = "INSERT INTO posts (image, details, userid) VALUES (?, ?, ?)";
     db.query(query, [image, details, userid], (err, result) => {
@@ -108,7 +118,7 @@ app.post("/addPost", (req, res) => {
 
         // Check if the insertion was successful
         if (result.affectedRows === 0) {
-            return res.status(500).send("Failed to add post.");
+            console.log("Failed to add post.");
         }
 
         

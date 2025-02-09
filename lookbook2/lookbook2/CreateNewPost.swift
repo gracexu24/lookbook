@@ -10,39 +10,14 @@ struct CreateNewPost: View {
     @State private var tags: [String] = []
     
     func uploadPost() {
-        guard let selectedImage = selectedImage else { return }
-        
-        let url = URL(string: "http://your-server-ip:5001/addPost")!
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        // Convert image to Base64 string
-        guard let imageData = selectedImage.jpegData(compressionQuality: 0.5) else { return }
-        let base64Image = imageData.base64EncodedString()
-        
-        // Prepare data
-        let postData: [String: Any] = [
-            "image": base64Image,
-            "details": details,
-            "userid": 1  // Replace with the actual user ID
-        ]
-        
-        do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: postData)
-        } catch {
-            print("Error encoding JSON: \(error)")
-            return
+        let url = URL(string: "http://localhost:5001/addUser/evilTejas")!
+
+        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+            guard let data = data else { return }
+            print(String(data: data, encoding: .utf8)!)
         }
-        
-        // Perform request
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                print("Error sending post: \(error)")
-                return
-            }
-            print("Post uploaded successfully!")
-        }.resume()
+
+        task.resume()
     }
 
 
