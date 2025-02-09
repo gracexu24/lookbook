@@ -33,7 +33,8 @@ db.connect((err) => {
         CREATE TABLE IF NOT EXISTS posts (
             id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
             image VARCHAR(255),
-            details VARCHAR(500),
+            details VARCHAR(500), 
+            caption VARCHAR(500),
             userid INT NOT NULL
         )`;
 
@@ -93,14 +94,14 @@ app.get("/addUser/:name", (req, res) => {
 });
 
 app.post("/addPost", (req, res) => {
-    const { image, details, userid } = req.body;
+    const { image, details, userid, caption } = req.body;
 
-    if (!image || !details || !userid) {
+    if (!image || !details || !userid || !caption ) {
         return res.status(400).send("Missing required fields");
     }
 
-    const query = "INSERT INTO posts (image, details, userid) VALUES (?, ?, ?)";
-    db.query(query, [image, details, userid], (err, result) => {
+    const query = "INSERT INTO posts (image, details, userid, caption) VALUES (?, ?, ?, ?)";
+    db.query(query, [image, details, userid, caption], (err, result) => {
         if (err) {
             console.error("Error inserting post:", err);
             return res.status(500).send("Error adding post");
@@ -111,7 +112,7 @@ app.post("/addPost", (req, res) => {
             return res.status(500).send("Failed to add post.");
         }
 
-        
+
         res.send("Post added successfully!");
     });
 });
