@@ -13,7 +13,7 @@ struct SignUpView: View {
                 VStack {
                     VStack(spacing: 40) {
                         ZStack {
-                            Text("Create \nAccount")
+                            Text("Create an \nAccount")
                                 .foregroundColor(.black)
                                 .font(.system(size: 35))
                                 .fontWeight(.bold)
@@ -29,28 +29,28 @@ struct SignUpView: View {
                                     placeHolder: "Name",
                                     imageName: "envelope",
                                     tOpacity: 1.0,
-                                    bColor: "textColor2",
+                                    bColor: "textColor1",
                                     value: $name
                                 )
                                 CustomTextField(
                                     placeHolder: "Email",
                                     imageName: "lock",
                                     tOpacity: 1.0,
-                                    bColor: "textColor2",
+                                    bColor: "textColor1",
                                     value: $email
                                 )
                                 CustomTextField(
                                     placeHolder: "Password",
                                     imageName: "envelope",
                                     tOpacity: 1.0,
-                                    bColor: "textColor2",
+                                    bColor: "textColor1",
                                     value: $password
                                 )
                                 CustomTextField(
                                     placeHolder: "Confirm Password",
                                     imageName: "lock",
                                     tOpacity: 1.0,
-                                    bColor: "textColor2",
+                                    bColor: "textColor1",
                                     value: $cpassword
                                 )
                             }
@@ -59,7 +59,7 @@ struct SignUpView: View {
                                 Button(
                                     action: {},
                                     label: {
-                                        CustomButton(title: "SIGN UP", bColor: "color2")
+                                        CustomButton(title: "SIGN UP", bColor: "color1")
                                     }
                                 )
                             }
@@ -72,7 +72,7 @@ struct SignUpView: View {
                     HStack {
                         Text("Already have an account?")
                             .fontWeight(.bold)
-                            .foregroundColor(.white)
+                            .foregroundColor(.black)
                             .font(.system(size: 18))
 
                         NavigationLink(destination: LoginView(), isActive: $isLinkActive) {
@@ -91,7 +91,7 @@ struct SignUpView: View {
                 TopBarView()
             }
             .edgesIgnoringSafeArea(.bottom)
-            .navigationBarHidden(true) // ✅ Now inside NavigationView
+            .navigationBarHidden(true)
         }
     }
 }

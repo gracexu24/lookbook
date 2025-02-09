@@ -11,13 +11,14 @@ struct LoginView: View {
                 VStack {
                     VStack(spacing: 40) {
                         ZStack {
-                            Text("Welcome \nBack")
+                            Text("Welcome \nBack to LookBook.")
                                 .foregroundColor(.black)
                                 .font(.system(size: 35))
                                 .fontWeight(.bold)
                                 .multilineTextAlignment(.leading)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(.leading, 20)
+                                .padding(.top, 150)
                         }
                         VStack(spacing: 30) {
                             VStack(spacing: 30) {
@@ -54,7 +55,7 @@ struct LoginView: View {
                     HStack {
                         Text("Don't have an account?")
                             .fontWeight(.bold)
-                            .foregroundColor(.white)
+                            .foregroundColor(.black)
                             .font(.system(size: 18))
 
                         Button(action: {}, label: {
