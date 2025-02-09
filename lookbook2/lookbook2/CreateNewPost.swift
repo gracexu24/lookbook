@@ -12,7 +12,7 @@ struct CreateNewPost: View {
     @State private var showImagePicker: Bool = false
     @State private var tags: [String] = []
     
-    func uploadPost(image: UIImage, details: String, caption: String, userId: Int) {
+    func uploadPost(image: UIImage, details: String, caption: String, userId: String) {
         print("hello")
         guard let url = URL(string: "http://localhost:5001/addPost") else {
                 print("Invalid URL")
@@ -32,10 +32,10 @@ struct CreateNewPost: View {
 
         // JSON Data
         let postData: [String: Any] = [
-            "image": base64Image,
+            "image": "base64Image",
             "details": details,
             "caption": caption,
-            "userid": userId
+            "username": userId
         ]
 
         do {
@@ -69,7 +69,7 @@ struct CreateNewPost: View {
                 Spacer()
                 Button("Post") {
                     if let image = selectedImage {
-                            uploadPost(image: image, details: details, caption: caption, userId: 1) // Replace `1` with actual user ID
+                            uploadPost(image: image, details: details, caption: caption, userId: "evilTejas") // Replace `1` with actual user ID
                         }
                 }
                 .disabled(selectedImage == nil)

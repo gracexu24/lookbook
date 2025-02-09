@@ -98,16 +98,22 @@ app.get("/addUser/:name", (req, res) => {
 });
 
 
+// Middleware to handle CORS and JSON requests
+app.use(cors());
+app.use(express.json()); // Correct way to parse JSON
+app.use(bodyParser.urlencoded({ extended: true })); // To handle form data (optional)
+
 app.post("/addPost", (req, res) => {
+    console.log(req.body)
     const { image, details, username, caption } = req.body;
 
-    if (!image || !details || !username || !caption ) {
+    if (!image || !username) {
         return res.status(400).send("Missing required fields");
     }
 
 
-    const query = "INSERT INTO posts (image, details, username, caption) VALUES (?, ?, ?, ?)";
-    db.query(query, [image, details, username, caption], (err, result) => {
+    const query = "INSERT INTO posts (image, details, caption, username) VALUES (?, ?, ?, ?)";
+    db.query(query, [image, details, caption, username], (err, result) => {
         if (err) {
             console.error("Error inserting post:", err);
             return res.status(500).send("Error adding post");
@@ -116,6 +122,7 @@ app.post("/addPost", (req, res) => {
         // Check if the insertion was successful
         if (result.affectedRows === 0) {
             console.log("Failed to add post.");
+            return res.status(500).send("Post insertion failed.");
         }
 
 
