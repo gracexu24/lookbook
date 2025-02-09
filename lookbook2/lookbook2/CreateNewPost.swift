@@ -1,4 +1,9 @@
 import SwiftUI
+import Foundation
+import UIKit
+
+
+
 
 struct CreateNewPost: View {
     @State private var caption: String = ""
@@ -6,6 +11,54 @@ struct CreateNewPost: View {
     @State private var selectedImage: UIImage? = nil
     @State private var showImagePicker: Bool = false
     @State private var tags: [String] = []
+    
+    func uploadPost(image: UIImage, details: String, caption: String, userId: String) {
+        print("hello")
+        guard let url = URL(string: "http://localhost:5001/addPost") else {
+                print("Invalid URL")
+                return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        // Convert UIImage to Base64 String
+        guard let imageData = image.jpegData(compressionQuality: 0.5) else {
+            print("Failed to convert image")
+            return
+        }
+        let base64Image = imageData.base64EncodedString()
+
+        // JSON Data
+        let postData: [String: Any] = [
+            "image": "base64Image",
+            "details": details,
+            "caption": caption,
+            "username": userId
+        ]
+
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: postData)
+        } catch {
+            print("Error encoding JSON:", error)
+            return
+        }
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Request error:", error.localizedDescription)
+                return
+            }
+
+            if let data = data, let responseString = String(data: data, encoding: .utf8) {
+                print("Server response:", responseString)
+            }
+        }
+
+        task.resume()
+    }
+
 
     var body: some View {
         VStack {
@@ -15,7 +68,9 @@ struct CreateNewPost: View {
                 }
                 Spacer()
                 Button("Post") {
-                    // Handle post action
+                    if let image = selectedImage {
+                            uploadPost(image: image, details: details, caption: caption, userId: "evilTejas") // Replace `1` with actual user ID
+                        }
                 }
                 .disabled(selectedImage == nil)
             }

@@ -1,5 +1,7 @@
 const express = require("express");
 const mysql = require("mysql2");
+const cors = require("cors");
+const bodyParser = require("body-parser");
 
 
 const db = mysql.createConnection({
@@ -31,8 +33,9 @@ db.connect((err) => {
         CREATE TABLE IF NOT EXISTS posts (
             id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
             image VARCHAR(255),
-            details VARCHAR(500),
-            userid INT NOT NULL
+            details VARCHAR(500), 
+            caption VARCHAR(500),
+            username VARCHAR(255)
         )`;
 
     db.query(createUsersTable);
@@ -44,7 +47,6 @@ db.connect((err) => {
 
 const app = express();
 const port = process.env.PORT || 5001;
-const cors = require("cors");
 app.use(cors());
 
 app.get("/", (req, res) => {
@@ -76,18 +78,55 @@ app.get("/showUsers", (req, res) => {
 app.get("/showPosts", (req, res) => {
     db.query("SELECT * FROM posts", (err, result) => {
         if (err) return err;
-        res.send(result);
+        res.json(result);
     })
 });
 
 app.get("/addUser/:name", (req, res) => {
     const name = req.params.name;
 
-    const query = `INSERT INTO users (username) VALUES ${name}`;
+    // Use parameterized query to prevent SQL Injection
+    const query = "INSERT INTO users (username) VALUES (?)";
 
-    db.query(query, (err) => {
-        if (err) return res.send(err);
+    db.query(query, [name], (err, result) => {
+        if (err) {
+            console.error("Error adding user:", err);
+            return res.status(500).send("Error adding user");
+        }
         res.send("User added successfully!");
+    });
+});
+
+
+// Middleware to handle CORS and JSON requests
+app.use(cors());
+app.use(express.json()); // Correct way to parse JSON
+app.use(bodyParser.urlencoded({ extended: true })); // To handle form data (optional)
+
+app.post("/addPost", (req, res) => {
+    console.log(req.body)
+    const { image, details, username, caption } = req.body;
+
+    if (!image || !username) {
+        return res.status(400).send("Missing required fields");
+    }
+
+
+    const query = "INSERT INTO posts (image, details, caption, username) VALUES (?, ?, ?, ?)";
+    db.query(query, [image, details, caption, username], (err, result) => {
+        if (err) {
+            console.error("Error inserting post:", err);
+            return res.status(500).send("Error adding post");
+        }
+
+        // Check if the insertion was successful
+        if (result.affectedRows === 0) {
+            console.log("Failed to add post.");
+            return res.status(500).send("Post insertion failed.");
+        }
+
+
+        res.send("Post added successfully!");
     });
 });
 
