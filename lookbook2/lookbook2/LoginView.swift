@@ -1,12 +1,9 @@
 import SwiftUI
 
 struct LoginView: View {
-
-            
     @State private var email: String = ""
     @State private var password: String = ""
     @State var isLinkActive = false
-    
 
     var body: some View {
         NavigationView {
@@ -27,64 +24,59 @@ struct LoginView: View {
                                 CustomTextField(
                                     placeHolder: "Email",
                                     imageName: "envelope",
-                                    tOpacity: 0.6, // ✅ tOpacity comes before bColor
+                                    tOpacity: 0.6,
                                     bColor: "textColor1",
-                                    value: $email)
+                                    value: $email
+                                )
 
                                 CustomTextField(
                                     placeHolder: "Password",
                                     imageName: "lock",
-                                    tOpacity: 0.6, // ✅ Corrected order
+                                    tOpacity: 0.6,
                                     bColor: "textColor1",
-                                    value: $password)
+                                    value: $password
+                                )
                             }
                         }
-                            VStack (alignment: .trailing) {
-                                Text("Forgot Password")
-                                    .fontWeight(.medium)
-                                
-                                NavigationLink(destination: SignUpView(), isActive: $isLinkActive){
-                                    Button(action: {
-                                        self.isLinkActive = true
-                                    }, label: {
-                                        CustomButton(title: "SIGN IN", bColor: "color1")
-                                    })
+                        VStack(alignment: .trailing) {
+                            Text("Forgot Password")
+                                .fontWeight(.medium)
+                            
+                            NavigationLink(destination: SignUpView(), isActive: $isLinkActive) {
+                                CustomButton(title: "SIGN IN", bColor: "color1")
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                    }
 
-                                }
-                            }.padding(.horizontal, 20)
-
-            }
-        }
                     Spacer()
 
                     HStack {
                         Text("Don't have an account?")
-                            .fontWeight(.bold) // Fixed the typo
+                            .fontWeight(.bold)
                             .foregroundColor(.white)
                             .font(.system(size: 18))
 
-                        Button(action: {}, label: {  // Fixed "lable" typo
+                        Button(action: {}, label: {
                             Text("SIGN UP")
                                 .font(.system(size: 18))
                                 .foregroundColor(Color("color1"))
                                 .fontWeight(.bold)
                         })
                     }
-                    .frame(height: 63) // Now correctly applied to HStack
+                    .frame(height: 63)
                     .frame(minWidth: 0, maxWidth: .infinity)
                     .background(Color("color2"))
                     .ignoresSafeArea()
+                } // ✅ Closing `VStack`
 
-                        }
-                        TopBarView()
-                    }
-
-                    .edgesIgnoringSafeArea(.bottom)
-                }
-                //navigationBarHidden(true)
+                TopBarView() // ✅ Placed inside `ZStack`, ensuring correct hierarchy
+            } // ✅ Closing `ZStack`
+            .edgesIgnoringSafeArea(.bottom)
+            .navigationBarHidden(true) // ✅ Now properly inside `NavigationView`
+        } // ✅ Closing `NavigationView`
     }
-
-
+}
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {

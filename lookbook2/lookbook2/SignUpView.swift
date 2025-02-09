@@ -8,7 +8,6 @@ struct SignUpView: View {
     @State var isLinkActive = false
 
     var body: some View {
-
         NavigationView {
             ZStack(alignment: .topLeading) {
                 VStack {
@@ -23,38 +22,51 @@ struct SignUpView: View {
                                 .padding(.leading, 20)
                                 .padding(.top, 100)
                         }
+
                         VStack(spacing: 20) {
                             VStack(spacing: 20) {
                                 CustomTextField(
-                                    placeHolder: "Name", imageName: "envelope",
-                                    tOpacity:
-                                        1.0, bColor: "textColor2", value: $name)
+                                    placeHolder: "Name",
+                                    imageName: "envelope",
+                                    tOpacity: 1.0,
+                                    bColor: "textColor2",
+                                    value: $name
+                                )
                                 CustomTextField(
-                                    placeHolder: "Email", imageName: "lock",
-                                    tOpacity:
-                                        1.0, bColor: "textColor2", value: $email)
+                                    placeHolder: "Email",
+                                    imageName: "lock",
+                                    tOpacity: 1.0,
+                                    bColor: "textColor2",
+                                    value: $email
+                                )
                                 CustomTextField(
-                                    placeHolder: "Password", imageName: "envelope",
-                                    tOpacity:
-                                        1.0, bColor: "textColor2", value: $password)
+                                    placeHolder: "Password",
+                                    imageName: "envelope",
+                                    tOpacity: 1.0,
+                                    bColor: "textColor2",
+                                    value: $password
+                                )
                                 CustomTextField(
-                                    placeHolder: "Confirm Password", imageName: "lock",
-                                    tOpacity:
-                                        1.0, bColor: "textColor2", value: $cpassword)
+                                    placeHolder: "Confirm Password",
+                                    imageName: "lock",
+                                    tOpacity: 1.0,
+                                    bColor: "textColor2",
+                                    value: $cpassword
+                                )
                             }
 
                             VStack(alignment: .trailing) {
-
                                 Button(
                                     action: {},
                                     label: {
                                         CustomButton(title: "SIGN UP", bColor: "color2")
-                                    })
-
-                            }.padding(.horizontal, 20)
-
+                                    }
+                                )
+                            }
+                            .padding(.horizontal, 20)
                         }
                     }
+
                     Spacer()
 
                     HStack {
@@ -62,34 +74,29 @@ struct SignUpView: View {
                             .fontWeight(.bold)
                             .foregroundColor(.white)
                             .font(.system(size: 18))
-                        NavigationLink(value: true, label: {
-                            Button( action: {
-                                    self.isLinkActive = true
-                                },
-                                    label: {
-                                    Text("SIGN IN")
-                                        .font(.system(size: 18))
-                                        .foregroundColor(Color("color1"))
-                                        .fontWeight(.bold)
-                                })
-                        }
-                    )}
 
+                        NavigationLink(destination: LoginView(), isActive: $isLinkActive) {
+                            Text("SIGN IN")
+                                .font(.system(size: 18))
+                                .foregroundColor(Color("color1"))
+                                .fontWeight(.bold)
+                        }
+                    }
                     .frame(height: 63)
                     .frame(minWidth: 0, maxWidth: .infinity)
                     .background(Color("color2"))
                     .ignoresSafeArea()
-
                 }
+                
                 TopBarView()
             }
-
             .edgesIgnoringSafeArea(.bottom)
+            .navigationBarHidden(true) // ✅ Now inside NavigationView
         }
-        navigationBarHidden(true)
     }
 }
-struct SignUpView_Preview: PreviewProvider {
+
+struct SignUpView_Previews: PreviewProvider {
     static var previews: some View {
         SignUpView()
     }
