@@ -93,13 +93,6 @@ struct Feed: View {
 }
 
 
-struct Feed_Previews: PreviewProvider {
-    static var previews: some View {
-        Feed()
-    }
-}
-
-
 @ViewBuilder
 func ProfileView()->some View{
     HStack {
@@ -165,5 +158,12 @@ func fetchPosts() {
     }
 }
 }.resume()
+    }
+}
+
+
+struct Feed_Previews: PreviewProvider {
+    static var previews: some View {
+        Feed()
     }
 }
