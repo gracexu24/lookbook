@@ -35,7 +35,7 @@ db.connect((err) => {
             image VARCHAR(255),
             details VARCHAR(500), 
             caption VARCHAR(500),
-            userid INT NOT NULL
+            username VARCHAR(255)
         )`;
 
     db.query(createUsersTable);
@@ -99,15 +99,15 @@ app.get("/addUser/:name", (req, res) => {
 
 
 app.post("/addPost", (req, res) => {
-    const { image, details, userid, caption } = req.body;
+    const { image, details, username, caption } = req.body;
 
-    if (!image || !details || !userid || !caption ) {
+    if (!image || !details || !username || !caption ) {
         return res.status(400).send("Missing required fields");
     }
 
 
-    const query = "INSERT INTO posts (image, details, userid, caption) VALUES (?, ?, ?, ?)";
-    db.query(query, [image, details, userid, caption], (err, result) => {
+    const query = "INSERT INTO posts (image, details, username, caption) VALUES (?, ?, ?, ?)";
+    db.query(query, [image, details, username, caption], (err, result) => {
         if (err) {
             console.error("Error inserting post:", err);
             return res.status(500).send("Error adding post");
