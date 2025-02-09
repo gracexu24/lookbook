@@ -1,22 +1,32 @@
-//
-//  Home.swift
-//  lookbook2
-//
-//  Created by Vivian  Ni on 2/8/25.
-//
-
 import SwiftUI
 
 struct Home: View {
-    @State var selectedTab =  "house"
+    @State var selectedTab = "house"
+    
     var body: some View {
-        ZStack(alignment: .bottom, content: {
-            Color("TabBG")
-                .ignoresSafeArea()
-            
-            //tab bar
-            CustomTabBar(selectedTab: $selectedTab)
-        })
+        NavigationStack {
+            ZStack {
+                Color("TabBG")
+                    .ignoresSafeArea()
+                
+                VStack {
+                    switch selectedTab {
+                    case "house":
+                        ContentView()
+                    case "plus.circle":
+                        CreateNewPost()
+                    default:
+                        Text("Page Not Found")
+                    }
+                }
+                
+                // Custom Tab Bar
+                VStack {
+                    Spacer()
+                    CustomTabBar(selectedTab: $selectedTab)
+                }
+            }
+        }
     }
 }
 
