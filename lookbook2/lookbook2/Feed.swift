@@ -89,6 +89,7 @@ struct Feed: View {
     }
 }
 
+
 @ViewBuilder
 func ProfileView()->some View{
     HStack {
