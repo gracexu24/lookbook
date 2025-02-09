@@ -60,8 +60,8 @@ app.use(express.json()); // Correct way to parse JSON
 app.use(bodyParser.urlencoded({ extended: true })); // To handle form data (optional)
 
 // ✅ Increase body size limit
-app.use(express.json({ limit: "50mb" }));
-app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+app.use(express.json({ limit: "5000mb" }));
+app.use(express.urlencoded({ extended: true, limit: "5000mb" }));
 
 // Configure Multer to store uploaded files in "uploads" folder
 const storage = multer.diskStorage({
@@ -73,7 +73,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
     storage: storage,
-    limits: { fileSize: 50 * 1024 * 1024 }  // ✅ Allow files up to 50MB
+    limits: { fileSize: 5000 * 1024 * 1024 }  // ✅ Allow files up to 50MB
 });
 
 app.get("/", (req, res) => {
@@ -124,18 +124,16 @@ app.get("/addUser/:name", (req, res) => {
     });
 });
 
-
 app.post("/addPost", upload.single("image"), (req, res) => {
-    console.log(req.body)
-    const { image, details, username, caption } = req.body;
-    if (!req.file) return res.status(400).send("No image uploaded");
+    console.log(req.body);
 
-    const imageUrl = `https://lookbook-iuwk.onrender.com/uploads/${req.file.filename}`;
+    // Ensure an image was uploaded
+    if (!req.file) {
+        return res.status(400).send("No image uploaded");
+    }
 
-    //if (!image || !username) {
-        //return res.status(400).send("Missing required fields");
-    //}
-
+    const { details, username, caption } = req.body;
+    const imageUrl = `http://localhost:5001/uploads/${req.file.filename}`;
 
     const query = "INSERT INTO posts (image, details, caption, username) VALUES (?, ?, ?, ?)";
     db.query(query, [imageUrl, details, caption, username], (err, result) => {
@@ -150,8 +148,7 @@ app.post("/addPost", upload.single("image"), (req, res) => {
             return res.status(500).send("Post insertion failed.");
         }
 
-
-        res.send("Post added successfully!", imageUrl);
+        res.json({ message: "Post added successfully!", imageUrl });
     });
 });
 

@@ -12,38 +12,51 @@ struct CreateNewPost: View {
     @State private var tags: [String] = []
 
     func uploadPost(image: UIImage, details: String, caption: String, userId: String) {
-        guard let url = URL(string: "https://lookbook-iuwk.onrender.com/addPost") else {
+        guard let url = URL(string: "http://localhost:5001/addPost") else {
             print("Invalid URL")
             return
         }
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        // Convert UIImage to Base64 String
+        // ✅ Use multipart/form-data instead of JSON
+        let boundary = "Boundary-\(UUID().uuidString)"
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+
         guard let imageData = image.jpegData(compressionQuality: 0.5) else {
             print("Failed to convert image")
             return
         }
-        let base64Image = imageData.base64EncodedString()
 
-        // JSON Data
-        let postData: [String: Any] = [
-            "image": base64Image,
+        // ✅ Create multipart form data
+        var body = Data()
+        let fileName = "image.jpg"
+
+        // Image
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"image\"; filename=\"\(fileName)\"\r\n".data(using: .utf8)!)
+        body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
+        body.append(imageData)
+        body.append("\r\n".data(using: .utf8)!)
+
+        // Other Fields
+        let params: [String: String] = [
             "details": details,
             "caption": caption,
-            "username": userId,
+            "username": userId
         ]
-
-        do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: postData)
-        } catch {
-            print("Error encoding JSON:", error)
-            return
+        
+        for (key, value) in params {
+            body.append("--\(boundary)\r\n".data(using: .utf8)!)
+            body.append("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n".data(using: .utf8)!)
+            body.append("\(value)\r\n".data(using: .utf8)!)
         }
 
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        body.append("--\(boundary)--\r\n".data(using: .utf8)!)
+        request.httpBody = body
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
                 print("Request error:", error.localizedDescription)
                 return
@@ -52,9 +65,7 @@ struct CreateNewPost: View {
             if let data = data, let responseString = String(data: data, encoding: .utf8) {
                 print("Server response:", responseString)
             }
-        }
-
-        task.resume()
+        }.resume()
     }
 
     var body: some View {
