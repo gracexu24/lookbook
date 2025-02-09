@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-struct Home: View {
+struct Search: View {
     //View Properties
     @State private var searchText: String = ""
     @FocusState private var isSearching: Bool
@@ -122,9 +122,9 @@ struct Home: View {
         }
     }
 }
-struct Home_Previews: PreviewProvider {
+struct Search_Preview: PreviewProvider {
     static var previews: some View{
-        Home()
+        Search()
     }
 }
     
