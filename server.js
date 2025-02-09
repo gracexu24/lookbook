@@ -78,7 +78,7 @@ app.get("/showUsers", (req, res) => {
 app.get("/showPosts", (req, res) => {
     db.query("SELECT * FROM posts", (err, result) => {
         if (err) return err;
-        res.send(result);
+        res.json(result);
     })
 });
 
