@@ -15,6 +15,8 @@ struct Home: View {
                         ContentView()
                     case "plus.circle":
                         CreateNewPost()
+                    case "magnifyingglass.circle"
+                        Search()
                     default:
                         Text("Page Not Found")
                     }
