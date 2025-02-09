@@ -6,16 +6,14 @@ struct Home: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color("TabBG")
-                    .ignoresSafeArea()
                 
                 VStack {
                     switch selectedTab {
                     case "house":
-                        ContentView()
+                        Feed()
                     case "plus.circle":
                         CreateNewPost()
-                    case "magnifyingglass.circle"
+                    case "magnifyingglass.circle":
                         Search()
                     default:
                         Text("Page Not Found")

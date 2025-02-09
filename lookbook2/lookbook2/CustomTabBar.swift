@@ -26,28 +26,8 @@ struct CustomTabBar: View {
         }
         .padding()
         .background(Color("Tab"))
-        .clipShape(TabCurve(tabPoint: getCurvePoint() - 15))
         .cornerRadius(30)
         .padding(.horizontal)
-    }
-    
-    //extracting point
-    func getCurvePoint()->CGFloat{
-        if tabPoints.isEmpty{
-            return 10
-        }
-        else {
-            switch selectedTab {
-            case "person":
-                return tabPoints[0]
-            case "plus.circle":
-                return tabPoints[1]
-            case "magnifyingglass.circle":
-                return tabPoints[2]
-            default:
-                return tabPoints[3]
-            }
-        }
     }
 }
 
