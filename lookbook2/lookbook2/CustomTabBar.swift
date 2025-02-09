@@ -17,7 +17,9 @@ struct CustomTabBar: View {
     var body: some View {
         HStack(spacing: 0){
             TabBarButton(image: "house", selectedTab: $selectedTab, tabPoints: $tabPoints)
+            
             TabBarButton(image: "magnifyingglass.circle", selectedTab: $selectedTab, tabPoints: $tabPoints)
+            
             TabBarButton(image: "plus.circle", selectedTab: $selectedTab, tabPoints: $tabPoints)
             TabBarButton(image: "person", selectedTab: $selectedTab, tabPoints: $tabPoints)
             
