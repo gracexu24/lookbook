@@ -1,12 +1,9 @@
 import SwiftUI
 
 struct LoginView: View {
-
-            
     @State private var email: String = ""
     @State private var password: String = ""
     @State var isLinkActive = false
-    
 
     var body: some View {
         NavigationView {
@@ -15,7 +12,7 @@ struct LoginView: View {
                     VStack(spacing: 40) {
                         ZStack {
                             Text("Welcome \nBack")
-                                .foregroundColor("black")
+                                .foregroundColor(.black)
                                 .font(.system(size: 35))
                                 .fontWeight(.bold)
                                 .multilineTextAlignment(.leading)
@@ -23,68 +20,66 @@ struct LoginView: View {
                                 .padding(.leading, 20)
                         }
                         VStack(spacing: 30) {
-                            VStack (spacing: 30) {
+                            VStack(spacing: 30) {
                                 CustomTextField(
-                                    placeHolder: "Email", imageName: "envelope",
+                                    placeHolder: "Email",
+                                    imageName: "envelope",
+                                    tOpacity: 0.6,
                                     bColor: "textColor1",
-                                    tOpacity:
-                                        .6, value: $email)
+                                    value: $email
+                                )
+
                                 CustomTextField(
-                                    placeHolder: "Password", imageName: "lock",
+                                    placeHolder: "Password",
+                                    imageName: "lock",
+                                    tOpacity: 0.6,
                                     bColor: "textColor1",
-                                    tOpacity:
-                                        .6, value: $password)
+                                    value: $password
+                                )
                             }
-
-                            VStack (alignment: .trailing) {
-                                Text("Forgot Password")
-                                    .fontWeight(.medium)
-                                
-                                NavigationLink(destination: SignUpView(), isLinkActive: $isLinkActive){
-                                Button(action: {
-                                    self.isLinkActive = true
-                                }, label: {
-                                    CustomButton(title:"SIGN IN", bgColor: "color1")
-                                })
-
-                                }
-                            }.padding(.horizontal, 20)
-
-            }
-        }
-        Spacer()
-
-                            HStack{
-                                Text("Don't have an account?")
-                                    .fontWEight(.bold)
-                                    .foregroundColor(.white)
-                                    .font(.system(size:18))
-
-                                Button(action: {}, lable : {
-                                    Text("SIGN UP")
-                                        .font(.system(size: 18))
-                                        .foregroundColor(Color("color1"))
-                                        .fontWeight(.bold)
-                                })
-                            }
-
-                            .frame(height:63)
-                            .frame(minWidth: 0, maxWidth: .infinity)
-                            .background(Color("color2"))
-                            .ignoreSafeArea()
-                            
                         }
-                        TopBarView()
+                        VStack(alignment: .trailing) {
+                            Text("Forgot Password")
+                                .fontWeight(.medium)
+                            
+                            NavigationLink(destination: SignUpView(), isActive: $isLinkActive) {
+                                CustomButton(title: "SIGN IN", bColor: "color1")
+                            }
+                        }
+                        .padding(.horizontal, 20)
                     }
 
-                    .edgesIgnoringSafeArea(.bottom)
-                }
-                navigationBarHidden(true)
+                    Spacer()
+
+                    HStack {
+                        Text("Don't have an account?")
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .font(.system(size: 18))
+
+                        Button(action: {}, label: {
+                            Text("SIGN UP")
+                                .font(.system(size: 18))
+                                .foregroundColor(Color("color1"))
+                                .fontWeight(.bold)
+                        })
+                    }
+                    .frame(height: 63)
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .background(Color("color2"))
+                    .ignoresSafeArea()
+                } // ✅ Closing `VStack`
+
+                TopBarView() // ✅ Placed inside `ZStack`, ensuring correct hierarchy
+            } // ✅ Closing `ZStack`
+            .edgesIgnoringSafeArea(.bottom)
+            .navigationBarHidden(true) // ✅ Now properly inside `NavigationView`
+        } // ✅ Closing `NavigationView`
     }
 }
 
-struct LogInView_Previews: PreviewProvider {
+struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        LogInView()
+        LoginView()
     }
 }

@@ -5,22 +5,19 @@ struct CustomViews: View {
         Text("Hello, World!")
     }
 }
-struct CustomViews_Previews: PreviewProvider {
-    static var previews: some View {
-        CustomViews()
-    }
-}
+
+
 struct CustomTextField: View {
     var placeHolder: String
     var imageName: String
-    var bColor: String
     var tOpacity: Double
+    var bColor: String
     @Binding var value: String
 
     var body: some View {
         HStack {
             Image(systemName: imageName)
-                .resizeable()
+                .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 20, height: 20)
                 .padding(.leading, 20)
@@ -31,7 +28,7 @@ struct CustomTextField: View {
                     if value.isEmpty {
                         Text(placeHolder)
                             .foregroundColor(Color(bColor).opacity(tOpacity))
-                            .padding(.leastNormalMagnitude, 12)
+                            .padding(.leading, 12)
                             .font(.system(size: 20))
                     }
 
@@ -69,13 +66,15 @@ struct CustomTextField: View {
     }
 }
 struct CustomButton: View {
+    var title: String
+    var bColor: String
     var body: some View {
         Text(title)
             .fontWeight(.bold)
             .foregroundColor(.white)
             .frame(height: 58)
             .frame(minWidth: 0, maxWidth: .infinity)
-            .background(Color(bgColor))
+            .background(Color(bColor))
             .cornerRadius(15)
 
     }
@@ -86,9 +85,15 @@ struct TopBarView: View {
             action: {},
             label: {
                 Image("back")
-                    .resizeable()
+                    .resizable()
                     .frame(width: 17.5, height: 28.5)
                     .padding(.horizontal, 20)
             })
+    }
+}
+
+struct CustomViews_Previews: PreviewProvider {
+    static var previews: some View {
+        CustomViews()
     }
 }
