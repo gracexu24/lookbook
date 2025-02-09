@@ -78,7 +78,7 @@ struct CreateNewPost: View {
                 Button("Post") {
                     if let image = selectedImage {
                         uploadPost(
-                            image: image, details: details, caption: caption, userId: "evilTejas")  // Replace `1` with actual user ID
+                            image: image, details: details, caption: caption, userId: "viviaknee")  // Replace `1` with actual user ID
                     }
                 }
                 .disabled(selectedImage == nil)

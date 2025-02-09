@@ -103,7 +103,7 @@ app.get("/showUsers", (req, res) => {
 });
 
 app.get("/showPosts", (req, res) => {
-    db.query("SELECT * FROM posts", (err, result) => {
+    db.query("SELECT * FROM posts ORDER BY id DESC", (err, result) => {
         if (err) return err;
         res.json(result);
     })
