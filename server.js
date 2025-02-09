@@ -105,6 +105,13 @@ app.post("/addPost", (req, res) => {
             console.error("Error inserting post:", err);
             return res.status(500).send("Error adding post");
         }
+
+        // Check if the insertion was successful
+        if (result.affectedRows === 0) {
+            return res.status(500).send("Failed to add post.");
+        }
+
+        
         res.send("Post added successfully!");
     });
 });
