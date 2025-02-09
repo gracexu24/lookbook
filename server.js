@@ -106,9 +106,6 @@ app.post("/addPost", (req, res) => {
     }
 
 
-    const { image, details, userid } = req.body;
-
-
     const query = "INSERT INTO posts (image, details, userid, caption) VALUES (?, ?, ?, ?)";
     db.query(query, [image, details, userid, caption], (err, result) => {
         if (err) {
