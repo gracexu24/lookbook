@@ -53,6 +53,16 @@ const port = process.env.PORT || 5001;
 app.use(cors());
 app.use("/uploads", express.static("uploads")); 
 
+
+// Middleware to handle CORS and JSON requests
+app.use(cors());
+app.use(express.json()); // Correct way to parse JSON
+app.use(bodyParser.urlencoded({ extended: true })); // To handle form data (optional)
+
+// ✅ Increase body size limit
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+
 // Configure Multer to store uploaded files in "uploads" folder
 const storage = multer.diskStorage({
     destination: "./uploads/",
@@ -61,7 +71,10 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 50 * 1024 * 1024 }  // ✅ Allow files up to 50MB
+});
 
 app.get("/", (req, res) => {
     console.log("route hit")
@@ -111,11 +124,6 @@ app.get("/addUser/:name", (req, res) => {
     });
 });
 
-
-// Middleware to handle CORS and JSON requests
-app.use(cors());
-app.use(express.json()); // Correct way to parse JSON
-app.use(bodyParser.urlencoded({ extended: true })); // To handle form data (optional)
 
 app.post("/addPost", upload.single("image"), (req, res) => {
     console.log(req.body)
