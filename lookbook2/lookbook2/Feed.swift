@@ -80,10 +80,7 @@ struct Feed: View {
                             .padding(.trailing, 60)
                              .offset(x: 0, y: 250)
                             .padding()
-//                            .frame(width: 320, height: 100)
-//                            .background(.ultraThinMaterial)
-//                            .cornerRadius(22)
-//                            .offset(y: 120)
+                            .background(.ultraThinMaterial)
                         }
                     }
                 }
@@ -91,14 +88,6 @@ struct Feed: View {
             .onAppear(perform: fetchPosts)
     }
 }
-
-
-struct Feed_Previews: PreviewProvider {
-    static var previews: some View {
-        Feed()
-    }
-}
-
 
 @ViewBuilder
 func ProfileView()->some View{
@@ -165,5 +154,12 @@ func fetchPosts() {
     }
 }
 }.resume()
+    }
+}
+
+
+struct Feed_Previews: PreviewProvider {
+    static var previews: some View {
+        Feed()
     }
 }
