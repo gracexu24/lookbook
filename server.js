@@ -1,5 +1,7 @@
 const express = require("express");
 const mysql = require("mysql2");
+const cors = require("cors");
+const bodyParser = require("body-parser");
 
 
 const db = mysql.createConnection({
@@ -44,7 +46,6 @@ db.connect((err) => {
 
 const app = express();
 const port = process.env.PORT || 5001;
-const cors = require("cors");
 app.use(cors());
 
 app.get("/", (req, res) => {
@@ -88,6 +89,23 @@ app.get("/addUser/:name", (req, res) => {
     db.query(query, (err) => {
         if (err) return res.send(err);
         res.send("User added successfully!");
+    });
+});
+
+app.post("/addPost", (req, res) => {
+    const { image, details, userid } = req.body;
+
+    if (!image || !details || !userid) {
+        return res.status(400).send("Missing required fields");
+    }
+
+    const query = "INSERT INTO posts (image, details, userid) VALUES (?, ?, ?)";
+    db.query(query, [image, details, userid], (err, result) => {
+        if (err) {
+            console.error("Error inserting post:", err);
+            return res.status(500).send("Error adding post");
+        }
+        res.send("Post added successfully!");
     });
 });
 
