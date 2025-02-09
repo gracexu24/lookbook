@@ -20,7 +20,7 @@ struct CreateNewPost: View {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
 
-        // ✅ Use multipart/form-data instead of JSON
+        // Use multipart/form-data instead of JSON
         let boundary = "Boundary-\(UUID().uuidString)"
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
 
@@ -29,7 +29,7 @@ struct CreateNewPost: View {
             return
         }
 
-        // ✅ Create multipart form data
+        // Create multipart form data
         var body = Data()
         let fileName = "image.jpg"
 
