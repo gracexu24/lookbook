@@ -112,13 +112,13 @@ struct Search: View {
                     Rectangle()
                         .frame(width: 140, height: 8)
                     Rectangle()
-                        .frame(width: 80, height: 8)
+                        .frame(width: 140, height: 8)
                     Rectangle()
                         .frame(width: 80, height: 8)
                 })
             }
             .foregroundStyle(.gray.opacity(0.4))
-            .padding(.horizontal, 10)
+            .padding(.horizontal, 5)
         }
     }
 }

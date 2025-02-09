@@ -45,15 +45,6 @@ struct TabBarButton: View {
     var body: some View {
         //midpoint of each button for curve animation
         GeometryReader{reader -> AnyView in
-            //extracting midpoint and storing
-            let midX = reader.frame(in: .global).midX
-            
-            //avoiding junk data
-            DispatchQueue.main.async {
-                if tabPoints.count <= 4{
-                    tabPoints.append(midX)
-                }
-            }
             
             return AnyView(
                 Button(action: {

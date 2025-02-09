@@ -1,98 +1,104 @@
-//
-//  Feed.swift
-//  lookbook2
-//
-//  Created by Vivian  Ni on 2/8/25.
-//
-
 import SwiftUI
 
-import SwiftUI
+// Model to match JSON response from API
+struct Post: Codable, Identifiable {
+    let id: Int
+    let image: String
+    let details: String
+    let caption: String
+    let username: String
+}
 
 struct Feed: View {
+    @State private var isLiked = false
+    @State private var isBookmarked = false
+    
+    // Store fetched posts
+    @State private var posts: [Post] = []
+    @State private var errorMessage = ""
+
     var body: some View {
         ZStack {
-            ScrollView{
-                VStack(){
+            ScrollView {
+                VStack {
                     ProfileView()
                         .padding()
                     Spacer()
-                    VStack {
-                        ZStack{
-                            Image("fit")
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .cornerRadius(22)
-                                .frame(width: 320, height: 340)
-                                .padding(.top, 150)
-                                .padding(.bottom, 150)
-                            VStack{
-                                
+                    ForEach(posts) { post in
+                        ZStack {
+                            // Load image dynamically
+                            AsyncImage(url: URL(string: post.image)) {image in
+                                image.resizable()
+                            } placeholder: {
+                                ProgressView()
                             }
-                            .padding(100)
-                            .frame(width:320, height: 150)
-                            .background(.ultraThinMaterial)
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 320, height: 340)
                             .cornerRadius(22)
-                            .offset(x: 0, y: 210)
-                            VStack{
-                                Text("@vivianknee")
-                                    .font(.system(size: 20))
-                                    .fontWeight(.bold)
-                                    .offset(x: -75, y: 160)
-                                Text("Hi this is my OOTD!")
-                                    .font(.system(size: 10))
-                                    .fontWeight(.bold)
-                                    .offset(x: -75, y: 165)
-                            }
-                            HStack{
-                                Image(systemName: "hand.thumbsup")
-                                
-                            }
+                            .padding(.vertical, 50)
                             
-                        }
-                        //stack ends
-                        ZStack{
-                            Image("fit2")
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .cornerRadius(22)
-                                .frame(width: 320, height: 340)
-                                .padding(.top, 150)
-                                .padding(.bottom, 150)
-                            VStack{
-                                
+                            // Overlay for text and details
+                            VStack(alignment: .leading) {
+                                Text("@user\(post.username)")
+                                    .font(.system(size: 20, weight: .bold))
+                                    .offset(x:-75, y:0)
+                                Text(post.caption)
+                                    .font(.system(size: 14))
+                                    .offset(x:-75, y:0)
+                                    .foregroundColor(.gray)
+                                Text(post.details)
+                                    .font(.system(size: 14))
+                                    .foregroundColor(.black)
+                                    .offset(x:-75, y:0)
                             }
-                            .padding(100)
-                            .frame(width:320, height: 150)
-                            .background(.ultraThinMaterial)
-                            .cornerRadius(22)
-                            .offset(x: 0, y: 210)
-                            VStack{
-                                Text("@vivianknee")
-                                    .font(.system(size: 20))
-                                    .fontWeight(.bold)
-                                    .offset(x: -75, y: 160)
-                                Text("Hi this is my OOTD!")
-                                    .font(.system(size: 10))
-                                    .fontWeight(.bold)
-                                    .offset(x: -75, y: 165)
-                            }
-                            
+                            HStack {
+                               Spacer()
+                               Button(action: {
+                                  isLiked.toggle()
+                            }) {
+                               Image(systemName: isLiked ? "hand.thumbsup.fill" : "hand.thumbsup")
+                                      .font(.system(size: 25))
+                                      .foregroundColor(.black)
+                                                            }
+                                                            
+                                Button(action: {
+                                    isBookmarked.toggle()
+                                }) {
+                                Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
+                                     .font(.system(size: 25))
+                                     .foregroundColor(.black)
+                                                            }
+                                                            
+                               Button(action: {
+                                  }) {
+                               Image(systemName: "ellipsis.circle")
+                                 .font(.system(size: 25))
+                                .foregroundColor(.black)
+                               }
+                             }
+                             .frame(maxWidth: .infinity, alignment: .trailing)
+                            .padding(.trailing, 60)
+                             .offset(x: 0, y: 250)
+                            .padding()
+//                            .frame(width: 320, height: 100)
+//                            .background(.ultraThinMaterial)
+//                            .cornerRadius(22)
+//                            .offset(y: 120)
                         }
                     }
                 }
             }
-        }
+            .onAppear(perform: fetchPosts)
     }
 }
 
 
-struct Feed_Previews:
-    PreviewProvider {
+struct Feed_Previews: PreviewProvider {
     static var previews: some View {
         Feed()
     }
 }
+
 
 @ViewBuilder
 func ProfileView()->some View{
@@ -124,5 +130,40 @@ func ProfileView()->some View{
         Image(systemName: "bell.badge.circle.fill")
             .font(.system(size: 33))
             .foregroundColor(.black.opacity(0.7))
+    }
+}
+
+
+func fetchPosts() {
+    guard let url = URL(string: "https://lookbook-iuwk.onrender.com/showPosts") else {
+            errorMessage = "Invalid URL"
+            return
+        }
+        URLSession.shared.dataTask(with: url) { data, response, error in
+    if let error = error {
+        DispatchQueue.main.async {
+            errorMessage = "Error: \(error.localizedDescription)"
+        }
+        return
+    }
+
+    guard let data = data else {
+        DispatchQueue.main.async {
+            errorMessage = "No data received"
+        }
+        return
+    }
+
+    do {
+        let decodedPosts = try JSONDecoder().decode([Post].self, from: data)
+        DispatchQueue.main.async {
+            self.posts = decodedPosts
+        }
+    } catch {
+    DispatchQueue.main.async {
+        errorMessage = "Error decoding data: \(error.localizedDescription)"
+    }
+}
+}.resume()
     }
 }

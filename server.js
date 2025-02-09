@@ -1,6 +1,9 @@
 const express = require("express");
+const multer = require("multer");
 const mysql = require("mysql2");
 const cors = require("cors");
+const path = require("path");
+const fs = require("fs");
 const bodyParser = require("body-parser");
 
 
@@ -48,6 +51,30 @@ db.connect((err) => {
 const app = express();
 const port = process.env.PORT || 5001;
 app.use(cors());
+app.use("/uploads", express.static("uploads")); 
+
+
+// Middleware to handle CORS and JSON requests
+app.use(cors());
+app.use(express.json()); // Correct way to parse JSON
+app.use(bodyParser.urlencoded({ extended: true })); // To handle form data (optional)
+
+// ✅ Increase body size limit
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+
+// Configure Multer to store uploaded files in "uploads" folder
+const storage = multer.diskStorage({
+    destination: "./uploads/",
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 50 * 1024 * 1024 }  // ✅ Allow files up to 50MB
+});
 
 app.get("/", (req, res) => {
     console.log("route hit")
@@ -98,22 +125,20 @@ app.get("/addUser/:name", (req, res) => {
 });
 
 
-// Middleware to handle CORS and JSON requests
-app.use(cors());
-app.use(express.json()); // Correct way to parse JSON
-app.use(bodyParser.urlencoded({ extended: true })); // To handle form data (optional)
-
-app.post("/addPost", (req, res) => {
+app.post("/addPost", upload.single("image"), (req, res) => {
     console.log(req.body)
     const { image, details, username, caption } = req.body;
+    if (!req.file) return res.status(400).send("No image uploaded");
 
-    if (!image || !username) {
-        return res.status(400).send("Missing required fields");
-    }
+    const imageUrl = `https://lookbook-iuwk.onrender.com/uploads/${req.file.filename}`;
+
+    //if (!image || !username) {
+        //return res.status(400).send("Missing required fields");
+    //}
 
 
     const query = "INSERT INTO posts (image, details, caption, username) VALUES (?, ?, ?, ?)";
-    db.query(query, [image, details, caption, username], (err, result) => {
+    db.query(query, [imageUrl, details, caption, username], (err, result) => {
         if (err) {
             console.error("Error inserting post:", err);
             return res.status(500).send("Error adding post");
@@ -126,7 +151,7 @@ app.post("/addPost", (req, res) => {
         }
 
 
-        res.send("Post added successfully!");
+        res.send("Post added successfully!", imageUrl);
     });
 });
 

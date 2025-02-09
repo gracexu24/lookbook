@@ -1,9 +1,8 @@
-import SwiftUI
 import Foundation
+
+import SwiftUI
+
 import UIKit
-
-
-
 
 struct CreateNewPost: View {
     @State private var caption: String = ""
@@ -11,14 +10,13 @@ struct CreateNewPost: View {
     @State private var selectedImage: UIImage? = nil
     @State private var showImagePicker: Bool = false
     @State private var tags: [String] = []
-    
+
     func uploadPost(image: UIImage, details: String, caption: String, userId: String) {
-        print("hello")
         guard let url = URL(string: "https://lookbook-iuwk.onrender.com/addPost") else {
-                print("Invalid URL")
-                return
+            print("Invalid URL")
+            return
         }
-        
+
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -32,10 +30,10 @@ struct CreateNewPost: View {
 
         // JSON Data
         let postData: [String: Any] = [
-            "image": "base64Image",
+            "image": base64Image,
             "details": details,
             "caption": caption,
-            "username": userId
+            "username": userId,
         ]
 
         do {
@@ -59,7 +57,6 @@ struct CreateNewPost: View {
         task.resume()
     }
 
-
     var body: some View {
         VStack {
             HStack {
@@ -69,8 +66,9 @@ struct CreateNewPost: View {
                 Spacer()
                 Button("Post") {
                     if let image = selectedImage {
-                            uploadPost(image: image, details: details, caption: caption, userId: "evilTejas") // Replace `1` with actual user ID
-                        }
+                        uploadPost(
+                            image: image, details: details, caption: caption, userId: "evilTejas")  // Replace `1` with actual user ID
+                    }
                 }
                 .disabled(selectedImage == nil)
             }
@@ -121,7 +119,7 @@ struct CreateNewPost: View {
                         .cornerRadius(12)
                         .foregroundColor(.blue)
                         .font(.body)
-                        .padding(.bottom, 4) // Space between the tags
+                        .padding(.bottom, 4)  // Space between the tags
                 }
             }
             .padding([.leading, .trailing])
@@ -144,7 +142,8 @@ struct CreateNewPost: View {
         // Simple regex to find links in the text
         let regex = try! NSRegularExpression(pattern: "(https?://[a-zA-Z0-9./?=_-]+)", options: [])
         let nsString = details as NSString
-        let results = regex.matches(in: details, options: [], range: NSRange(location: 0, length: nsString.length))
+        let results = regex.matches(
+            in: details, options: [], range: NSRange(location: 0, length: nsString.length))
 
         // Extract the links as an array
         var tags: [String] = []
@@ -156,7 +155,6 @@ struct CreateNewPost: View {
         return tags
     }
 }
-
 struct ImagePicker: UIViewControllerRepresentable {
     @Binding var image: UIImage?
 
@@ -179,7 +177,10 @@ struct ImagePicker: UIViewControllerRepresentable {
             self.parent = parent
         }
 
-        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        func imagePickerController(
+            _ picker: UIImagePickerController,
+            didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
+        ) {
             if let selectedImage = info[.originalImage] as? UIImage {
                 parent.image = selectedImage
             }
@@ -187,7 +188,6 @@ struct ImagePicker: UIViewControllerRepresentable {
         }
     }
 }
-
 struct CreateNewPost_Previews: PreviewProvider {
     static var previews: some View {
         CreateNewPost()
